@@ -16,27 +16,24 @@ cover: /assets/images/default-cover.png
 
 # site title, description, meta_description, meta_keywords
 # Details for the RSS feed generator
-name: Mug Jekyll theme
-title: Mug
-description: "A free Jekyll theme for download"
-keywords: "Jekyll, theme, mug, free, download, SEO, blog, web"
-url: http://nandomoreira.me
-baseurl: "/mug"
-domain_name: nandomoreira.me
-# google_analytics: UA-52446115-1
-repo: http://github.com/nandomoreirame/mug
-disqus_shortname: "nandothemes"
+name: Godoy
+title: Godoy
+description: "Desenvolvimento Web, Agile & Chatbots"
+keywords: "Web, Ruby on Rails, ASP.NET, PHP, Javascript, Chatbot, DevOps"
+url: http://www.godoy.net.br
+baseurl: "/"
+domain_name: www.godoy.net.br
+google_analytics: UA-31336570-1
+repo: https://github.com/Godoy/godoy.github.io.git
+disqus_shortname: "adrianogodoy"
 
 author:
-  name      : Fernando Moreira
+  name      : Adriano Godoy
   image     : /assets/images/author.jpg
-  email     : nandomoreira.me@gmail.com
-  url       : http://nandomoreira.me
-  facebook  : http://facebook.com/fernando.dev
-  twitter   : http://twitter.com/nandomoreirame
-  instagram : http://instagram.com/nandomoreira.me
-  github    : http://github.com/nandomoreirame
-  linkedin  : http://linkedin.com/in/nandomoreirame
-  bio       : "Desenvolvedor Front-end/Wordpress entusiasta de performance, design responsivo e usabilidade, sempre em busca do melhor projeto e de um bom café."
+  email     : godoy.ccp@gmail.com
+  url       : http://godoy.net.br
+  github    : http://github.com/Godoy
+  linkedin  : https://br.linkedin.com/in/adrianogodoy
+  bio       : "Desenvolvedor Web nas tecnologias Ruby on Rails, PHP, .NET MVC e Javascript, além de experiência em HTML/CSS, Sass, Gulp, jQuery, DevOps e Agile."
 
 exclude: ["gulp", "node_modules", "bower", "bower_components", "config.rb", "src", "Gemfile", "Gemfile.lock", ".rvmrc", ".rbenv-version", "package.json", "gulpfile.js", "README.md", "Rakefile", "changelog.md"]
