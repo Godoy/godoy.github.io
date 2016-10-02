@@ -20,9 +20,9 @@ name: Godoy
 title: Godoy
 description: "Desenvolvimento Web, Agile & Chatbots"
 keywords: "Web, Ruby on Rails, ASP.NET, PHP, Javascript, Chatbot, DevOps"
-url: http://www.godoy.net.br
-baseurl: "/"
-domain_name: www.godoy.net.br
+url: http://godoy.net.br
+baseurl: ""
+domain_name: godoy.net.br
 google_analytics: UA-31336570-1
 repo: https://github.com/Godoy/godoy.github.io.git
 disqus_shortname: "adrianogodoy"
