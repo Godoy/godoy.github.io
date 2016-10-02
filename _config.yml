@@ -2,9 +2,9 @@ permalink   : /:categories/:year/:title/
 markdown    : kramdown
 highlighter : pygments
 
-paginate: 2 #6
+paginate: 6
 comments: true
-paginate_path: "/page/:num"
+paginate_path: "/pagina/:num"
 
 source: source
 destination: _site
