@@ -14,9 +14,9 @@ tags:
 - truncate_html
 ---
 
-Neste post vou apresentar algumas dicas básicas de SEO e aplicá-las em um projeto Ruby on Rails explicando cada passo. Já existem vários blogs com dicas de SEO (SEO Master, Agência Mestre, MOZ, etc), por isso focaremos em como aplicar as técnicas e mostrar quais gems podem nos auxiliar.
+Neste post vou apresentar algumas dicas básicas de SEO e aplicá-las em um projeto Ruby on Rails explicando cada passo. Já existem vários blogs com dicas de SEO (<a href="http://www.seomaster.com.br/blog" target="_blank">SEO Master</a>, <a href="http://www.agenciamestre.com/blog/" target="_blank">Agência Mestre</a>, <a href="https://moz.com/blog" target="_blank">MOZ</a>, etc), por isso focaremos em como aplicar as técnicas e mostrar quais gems podem nos auxiliar.
 
-O resultado dos passos aqui descritos resultaram neste projeto no Github: https://github.com/adrianogodoy/rails-seo. Após ler este post, se ainda restarem dúvidas, veja o log dos commits no github ou comente 😉
+O resultado dos passos aqui descritos resultaram neste projeto no Github: <a href="https://github.com/adrianogodoy/rails-seo" target="_blank">https://github.com/adrianogodoy/rails-seo</a>. Após ler este post, se ainda restarem dúvidas, veja o log dos commits no github ou comente 😉
 
 
 ## Criando a aplicação base para aplicar as técnicas
@@ -88,7 +88,7 @@ class News < ActiveRecord::Base
 end
 {% endhighlight %}
 
-Neste ponto já podemos cadastrar conteúdo no admin. Sugiro carregar conteúdo via seed – veja neste post como criar o seed com lorem ipsum.
+Neste ponto já podemos cadastrar conteúdo no admin. Sugiro carregar conteúdo via seed – <a href="http://godoy.net.br/ruby-on-rails/2015/importacao-de-conteudo-e-seed-no-rails/">veja neste post como criar o seed com lorem ipsum</a>.
 
 Agora criaremos as rotas, views e controllers para a página home, lista e interna de noticias, lista e interna de eventos.
 
@@ -115,7 +115,7 @@ Rails.application.routes.draw do
 end
 {% endhighlight %}
 
-Após configurar as rotas, inclua os scripts e css do Bootstrap no projeto. Siga os passos descritos na gem ou veja as modificações realizadas neste commit.
+Após configurar as rotas, inclua os scripts e css do Bootstrap no projeto. Siga os passos descritos na gem ou veja as modificações realizadas <a href="https://github.com/Godoy/rails-seo/commit/18cbd0f457dea06c755b50af549d56b7fb9af389" target="_blank">neste commit</a>.
 
 Neste ponto já é possível acessar as páginas de eventos e notícias. Estamos prontos para começar a aplicar as melhorias.
 
@@ -156,7 +156,7 @@ Nos controllers defina o valor do title. As actions de eventos, por exemplo, fic
   end
 {% endhighlight %}
 
-Simples! Veja neste commit as alterações feitas em nosso projeto neste passo.
+Simples! Veja <a href="https://github.com/Godoy/rails-seo/commit/51b180b5b32d5a9e18858c3c5a34f77edebb36e7" target="_blank">neste commit</a> as alterações feitas em nosso projeto neste passo.
 
 ## Metatags
 
@@ -183,11 +183,11 @@ class NewsController < ApplicationController
   end
 {% endhighlight %}
 
-Para utilizar o helper truncate no texto, inclua-o no controller (linha 2). Apenas para exemplificar, no campo Keywords quebrei o título separando as palavras com vírgulas. Para um projeto real, torne isso gerenciável. Crie um novo campo “keywords” onde o administrador possa cadastrar keywords específicas para cada conteúdo. Faça o mesmo com a description. Ao invés de utilizar os 150 primeiros caracteres (que podem não ter nada relevante sendo dito), crie um campo administrável, assim o usuário pode inserir um texto mais interessante para chamar os usuários para visitar a página. Commit com as alterações
+Para utilizar o helper truncate no texto, inclua-o no controller (linha 2). Apenas para exemplificar, no campo Keywords quebrei o título separando as palavras com vírgulas. Para um projeto real, torne isso gerenciável. Crie um novo campo “keywords” onde o administrador possa cadastrar keywords específicas para cada conteúdo. Faça o mesmo com a description. Ao invés de utilizar os 150 primeiros caracteres (que podem não ter nada relevante sendo dito), crie um campo administrável, assim o usuário pode inserir um texto mais interessante para chamar os usuários para visitar a página. <a href="https://github.com/Godoy/rails-seo/commit/5f34929a7b50b6d9d4c40fc2f9730336ee88b0c5" target="_blank">Commit com as alterações</a>
 
 ## URL Amigável
 
-Além da url ser um fator muito relevante para o rankeamento da página nos resultados de busca, ela é outro importante mecanismo para transmitir ao usuário qual será o conteúdo da página. (veja neste post como fazer em PHP utilizando .htaccess – old but gold 😀 )
+Além da url ser um fator muito relevante para o rankeamento da página nos resultados de busca, ela é outro importante mecanismo para transmitir ao usuário qual será o conteúdo da página. (veja <a href="http://godoy.net.br/php/2008/urls-amigaveis---htaccess/" target="_blank">neste post como fazer em PHP utilizando .htaccess</a> – old but gold 😀 )
 
 Para desenvolvermos esta feature no rails, mais uma vez faremos uso de uma gem: FriendlyId. No gemfile, adicione:
 
@@ -241,7 +241,7 @@ class Event < ActiveRecord::Base
 end
 {% endhighlight %}
 
-Como já havíamos cadastrado nosso conteúdo de teste, precisamos salvar novamente todos os registros para que seus slugs sejam gerados. O comando para ser executado no rails console é simples. Veja neste gist.
+Como já havíamos cadastrado nosso conteúdo de teste, precisamos salvar novamente todos os registros para que seus slugs sejam gerados. O comando para ser executado no rails console é simples. Veja <a href="https://gist.github.com/Godoy/6564097" target="_blank">neste gist</a>.
 
 Na listagem de notícias (http://localhost:3000/news) já é possível ver a nova URL sendo automaticamente gerada passando o slug ao invés do id. Agora só precisamos alterar a forma como os registros são buscados no controller:
 
@@ -278,13 +278,13 @@ class Event < ActiveRecord::Base
 end
 {% endhighlight %}
 
-Clique aqui para ver o commit com as alterações.
+<a href="https://github.com/Godoy/rails-seo/commit/c3df3da6377ee6ebc094de8f09f83c8a154d48cd" target="_blank">Clique aqui</a> para ver o commit com as alterações.
 
 ## Sitemap
 
-O sitemap é uma forma na qual o webmaster pode auxiliar (e agilizar) a indexação do site. Permite sugerir aos robôs de busca quais páginas devem ser indexadas, qual frequência de rastreamento, data da última modificação da página e a prioridade em relação às outras páginas do arquivo.
+O <a href="https://support.google.com/webmasters/answer/183668?hl=en" target="_blank">sitemap</a> é uma forma na qual o webmaster pode auxiliar (e agilizar) a indexação do site. Permite sugerir aos robôs de busca quais páginas devem ser indexadas, qual frequência de rastreamento, data da última modificação da página e a prioridade em relação às outras páginas do arquivo.
 
-Utilizaremos a gem Sitemap Generator. Adicione a gem ao seu Gemfile e execute o comando:
+Utilizaremos a gem `Sitemap Generator`. Adicione a gem ao seu Gemfile e execute o comando:
 
 {% highlight Ruby %}
 rake sitemap:install
@@ -342,7 +342,7 @@ E confira o seu sitemap gerado em `/public/sitemap.xml.gz`:
 ...
 {% endhighlight %}
 
-Veja o commit com as alterações para Sitemap.
+Veja o <a href="https://github.com/Godoy/rails-seo/commit/56cad016d28fee5fc83711408ebf60a1d5309a53" target="_blank">commit</a> com as alterações para Sitemap.
 
 ## Crie conteúdo e monitore!
 

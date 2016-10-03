@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Importação de Conteúdo e Seed no Rails"
-permalink: importacao-de-conteudo-e-seed-no-rails
 date: 2015-02-21 09:34:46
 comments: true
 description: "Importação de Conteúdo e Seed no Rails"
