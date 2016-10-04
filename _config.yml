@@ -4,7 +4,7 @@ highlighter : pygments
 
 paginate: 6
 comments: true
-paginate_path: "/pagina/:num"
+paginate_path: "/page/:num"
 
 source: source
 destination: _site
