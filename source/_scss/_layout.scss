@@ -395,6 +395,18 @@ $sliding-panel-background-focus: lighten($sliding-panel-background, 5%);
   }
 }
 
+.social-contacts {
+  a {
+    display: block;
+    font-size: 1em;
+    img {
+      width: 30px;
+      display: inline;
+      margin: 5px 0;
+    }
+  }
+}
+
 .github-corner {
   &:hover .octo-arm {
     animation: octocat-wave 560ms ease-in-out;
