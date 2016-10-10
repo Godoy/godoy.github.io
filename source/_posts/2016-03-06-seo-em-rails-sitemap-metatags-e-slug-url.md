@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "SEO em Rails: Sitemap Metatags e Slug url"
-date: 2015-03-06 10:08:12
+date: 2016-03-06 10:08:12
 comments: true
 description: "SEO em Rails: Sitemap Metatags e Slug url"
 keywords: "friendly_id, ruby on rails, seo, sitemap_generator, truncate_html"
