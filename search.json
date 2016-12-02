@@ -1,0 +1,99 @@
+[
+  
+    {
+      "title"    : "Paginação com scroll infinito em Rails utilizando will_paginate",
+      "category" : "",
+      "tags"     : "paginação, scroll infinito, gem, ruby on rails, and will_paginate",
+      "url"      : "/ruby-on-rails/2016/paginacao-com-scroll-infinito-em-rails-utilizando-willpaginate/",
+      "date"     : "2016-12-01 20:05:42 -0200"
+    } ,
+  
+    {
+      "title"    : "Carregando Javascript de forma assíncrona como o Google Analytics",
+      "category" : "",
+      "tags"     : "javascript, google analytics, assíncrono, and técnicas",
+      "url"      : "/tecnicas/2016/carregando-javascript-de-forma-assincrona-como-google-analytics/",
+      "date"     : "2016-10-07 04:52:38 -0300"
+    } ,
+  
+    {
+      "title"    : "SEO em Rails: Sitemap Metatags e Slug url",
+      "category" : "",
+      "tags"     : "friendly_id, ruby on rails, seo, sitemap_generator, and truncate_html",
+      "url"      : "/ruby-on-rails/2016/seo-em-rails-sitemap-metatags-e-slug-url/",
+      "date"     : "2016-03-06 07:08:12 -0300"
+    } ,
+  
+    {
+      "title"    : "Gist: Helper para adicionar classe &#39;active&#39; a um link de menu",
+      "category" : "",
+      "tags"     : "gist, ruby on rails, menu active, and helper",
+      "url"      : "/ruby-on-rails/2016/gist-helper-para-adicionar-classe-active-a-um-link-de-menu/",
+      "date"     : "2016-01-14 19:50:50 -0200"
+    } ,
+  
+    {
+      "title"    : "Busca Full Text",
+      "category" : "",
+      "tags"     : "asp.net, banco de dados, busca, full-text, lucene, performance, ruby on rails, and solr",
+      "url"      : "/tecnicas/2015/busca-full-text/",
+      "date"     : "2015-02-22 06:22:39 -0300"
+    } ,
+  
+    {
+      "title"    : "Importação de Conteúdo e Seed no Rails",
+      "category" : "",
+      "tags"     : "banco de dados, faker, gem, ruby on rails, seed, and task",
+      "url"      : "/ruby-on-rails/2015/importacao-de-conteudo-e-seed-no-rails/",
+      "date"     : "2015-02-21 07:34:46 -0200"
+    } ,
+  
+    {
+      "title"    : "Getting Started Kooboo CMS .NET",
+      "category" : "",
+      "tags"     : "asp.net, cms, getting started, and kooboo",
+      "url"      : "/asp-net/2014/getting-started-kooboo-cms-net/",
+      "date"     : "2014-09-09 19:10:06 -0300"
+    } ,
+  
+    {
+      "title"    : "Rails Gems",
+      "category" : "",
+      "tags"     : "gem, ruby, and ruby on rails",
+      "url"      : "/ruby-on-rails/2014/rails-gems/",
+      "date"     : "2014-07-29 19:06:21 -0300"
+    } ,
+  
+    {
+      "title"    : "Posts Customizados no Wordpress   Custom Posts",
+      "category" : "",
+      "tags"     : "cms, wordpress, php, and custom posts",
+      "url"      : "/php/2012/posts-customizados-no-wordpress---custom-posts/",
+      "date"     : "2012-05-14 18:51:09 -0300"
+    } ,
+  
+    {
+      "title"    : "Captcha - Confirmação Visual",
+      "category" : "",
+      "tags"     : "gd, php, and captcha",
+      "url"      : "/php/2009/captcha-confirmacao-visual/",
+      "date"     : "2009-03-13 17:27:11 -0300"
+    } ,
+  
+    {
+      "title"    : "URLs Amigáveis   .htaccess",
+      "category" : "",
+      "tags"     : "php, regex, and .htaccess",
+      "url"      : "/php/2008/urls-amigaveis---htaccess/",
+      "date"     : "2008-11-09 16:48:48 -0200"
+    } ,
+  
+    {
+      "title"    : "Refatoração",
+      "category" : "agile",
+      "tags"     : "agile and refatoracao",
+      "url"      : "/agile/2008/refatoracao/",
+      "date"     : "2008-10-30 13:51:23 -0200"
+    } 
+  
+]

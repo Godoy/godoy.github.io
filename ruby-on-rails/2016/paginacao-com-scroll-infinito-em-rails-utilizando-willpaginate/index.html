@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="theme-color" content="#2ecc71">
+<title> Paginação com scroll infinito em Rails utilizando will_paginate | Adriano Godoy</title>
+<meta name="description" content="Paginação com scroll infinito em Rails utilizando will_paginate">
+<meta name="og:image" content="/images/bg.png">
+<meta name="keywords" content="paginação, scroll infinito, gem, rails">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="canonical" href="http://godoy.net.br/ruby-on-rails/2016/paginacao-com-scroll-infinito-em-rails-utilizando-willpaginate/">
+<link rel="alternate" type="application/rss+xml" title="Adriano Godoy" href="http://godoy.net.br/feed.xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-31336570-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<script>base_url = "";</script>
+  </head>
+  <body class="single">
+    <main class="main-container">
+        <header class="site-header">
+  <div class="container txt-center">
+    <a href="#" class="nav-toogle js-menu-trigger sliding-panel-button">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+    <nav class="js-menu sliding-panel-content">
+      <ul>
+        <li><a href="/">home</a></li>
+        <li><a href="/about">about</a></li>
+        <li><a href="/feed.xml" target="_blank"><i class="icon icon-feed"></i> feed</a></li>
+      </ul>
+    </nav>
+    <div class="js-menu-screen sliding-panel-fade-screen"></div>
+    <a href="/" class="author-thumb dot">
+      <img src="/images/author.jpg" alt="Author thumbnail" class="dot">
+    </a>
+      <h1 class="post-title">Paginação com scroll infinito em Rails utilizando will_paginate</h1>
+      <p class="post-meta">Dec 1, 2016</p>
+  </div>
+</header>
+        <section class="main-content">
+          <article class="post">
+  <div class="post-content container">
+    <p>Paginação no estilo <em>“infinite scroll”</em> foi uma tendência ditada principalmente pelas timelines de redes sociais e uso cada vez mais comum de dispositivos móveis. Em telas estreitas, o conteúdo é disposto mais verticalmente, o que torna a rolagem algo essencial na navegação. Nada mais simples que antecipar o carregamento de conteúdo enquanto o usuário faz o scroll da página, melhorando sua experiência ao navegar.</p>
+<p>Em feeds de redes sociais, a quantidade e diversidade de conteúdo tornam inviável uma paginação normal. Além disso, para as redes sociais, quanto mais tempo o usuário passar navegando, melhor. É como em um shopping center: não há janelas ou relógios nas paredes. A diferença é que nas redes sociais você é o produto.</p>
+<p>Outra aplicação comum do scroll infinito é para paginação de logs. O usuário não quer se preocupar em qual página está - precisa apenas analisar uma quantidade grande de dados dispostos cronologicamente. Novos registros são inseridos no topo do log fazendo naturalmente com que conteúdos mais antigos desçam na página.</p>
+<p>É fácil encontrar códigos prontos de paginação com scroll infinito no Stack Overflow ou blogs de programação. Ao mesmo tempo, perder tempo encaixando pedaços de código e modificando uma paginação comum já em funcionamento é uma perda de tempo desnecessária. Essa foi a motivação para criar a gem <a href="http://bit.ly/will_paginate_infinite" target="_blank">will_paginate_infinite</a>, que apenas modifica a paginação padrão da popular gem <a href="https://rubygems.org/gems/will_paginate" target="_blank">will_paginate</a>.</p>
+<h1 id="instalao">Instalação</h1>
+<p>Inclua a gem no Gemfile:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s1">&#39;will_paginate_infinite&#39;</span></code></pre></div>
+<p>E execute <code>bundle install</code>.</p>
+<p>Adicione a referência ao manifesto css:
+<code>app/assets/stylesheets/application.css</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">*=</span> <span class="nb">require</span> <span class="n">will_paginate_infinite</span></code></pre></div>
+<p>E ao Javascript:
+<code>app/assets/javascripts/application.js</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">//</span><span class="o">=</span> <span class="nb">require</span> <span class="n">will_paginate_infinite</span></code></pre></div>
+<h1 id="configurao">Configuração</h1>
+<p>Para facilitar demonstração utilizaremos um <code>scaffold</code> de notícias <code>rails g scaffold News title</code>. A view onde está a lista de conteúdo ficará da seguinte forma:</p>
+<p><code>app/views/news/index.html.erb</code>:</p>
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="x">&lt;h1&gt;News List&lt;/h1&gt;</span>
+<span class="x">&lt;div class=&quot;list-news&quot;&gt;</span>
+<span class="x">  &lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">&lt;%</span> <span class="vi">@news</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">render</span> <span class="n">item</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">    </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">  &lt;/ul&gt;</span>
+<span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">will_paginate</span> <span class="vi">@news</span><span class="p">,</span> <span class="ss">renderer</span><span class="p">:</span> <span class="no">WillPaginateInfinite</span><span class="o">::</span><span class="no">InfinitePagination</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">&lt;/div&gt;</span></code></pre></div>
+<p>O principal ponto aqui é passar o renderer como argumento para o will_paginate: <code>WillPaginateInfinite::InfinitePagination</code></p>
+<p>Na <code>partial</code> da notícia colocaremos apenas o título:</p>
+<p><code>app/views/news/_news.html.erb</code></p>
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="x">&lt;li&gt;</span>
+<span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">&lt;/li&gt;</span></code></pre></div>
+<p>O controller com os itens a serem paginados fica da seguinte forma:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># app/controllers/news_controller.rb</span>
+<span class="k">class</span> <span class="nc">NewsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="vi">@news</span> <span class="o">=</span> <span class="no">News</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="ss">:created_at</span><span class="p">)</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span><span class="ss">:page</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:page</span><span class="o">]</span><span class="p">,</span> <span class="ss">:per_page</span> <span class="o">=&gt;</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="c1"># ...</span>
+    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>
+      <span class="nb">format</span><span class="o">.</span><span class="n">html</span>
+      <span class="nb">format</span><span class="o">.</span><span class="n">js</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>E, finalmente, crie uma versão javascript da view de listagem de notícias:</p>
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="x"># app/views/news/index.js.erb</span>
+<span class="cp">&lt;%=</span> <span class="n">infinite_append</span> <span class="s2">&quot;.list-news ul&quot;</span><span class="p">,</span> <span class="vi">@news</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></div>
+<p>ou</p>
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="x"># app/views/news/index.js.erb</span>
+<span class="cp">&lt;%=</span> <span class="n">infinite_append</span> <span class="s2">&quot;.list-news ul&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="ss">partial</span><span class="p">:</span> <span class="s2">&quot;news/news&quot;</span><span class="p">,</span> <span class="ss">collection</span><span class="p">:</span> <span class="vi">@news</span> <span class="p">}</span>  <span class="cp">%&gt;</span><span class="x"></span></code></pre></div>
+<p>Note que <code>.list-news ul</code> é o seletor do elemento container onde as <code>partials</code> deverão ser inseridas no html.</p>
+<h2 id="exemplo">Exemplo</h2>
+<p>Código de exemplo no Github utilizando a gem <code>will_paginate_infinite</code> com Rails 4: <a href="https://github.com/Godoy/will_paginate_infinite_example" target="_blank">github.com/Godoy/will_paginate_infinite_example</a></p>
+    <aside class="share">
+      <span>Compartilhe: </span>
+      <!-- Go to www.addthis.com/dashboard to customize your tools -->
+      <div class="addthis_inline_share_toolbox"></div>
+    </aside>
+  </div>
+  <hr>
+  <aside id="comments" class="disqus">
+    <div class="container">
+      <h3><i class="icon icon-comments-o"></i> Comments</h3>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'adrianogodoy';
+        var disqus_identifier = '/ruby-on-rails/2016/paginacao-com-scroll-infinito-em-rails-utilizando-willpaginate';
+        var disqus_title = 'Paginação com scroll infinito em Rails utilizando will_paginate';
+        var disqus_url = 'http://godoy.net.br';
+        /*var disqus_developer = 1;*/
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>
+        Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+      </noscript>
+    </div>
+  </aside>
+</article>
+        </section>
+<div class="clearfix"></div>
+<footer class="site-footer txt-center">
+  <hr>
+  <ul class="social">
+  </ul>
+</footer>
+    </main>
+    <!-- <a href="https://github.com/Godoy/godoy.github.io.git" target="_blank" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#000; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a> -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jekyll-search.min.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4ea16b894211cc28"></script>
+  </body>
+</html>

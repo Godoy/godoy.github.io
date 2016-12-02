@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="theme-color" content="#2ecc71">
+<title> Captcha - Confirmação Visual | Adriano Godoy</title>
+<meta name="description" content="Captcha - Confirmação Visual">
+<meta name="og:image" content="/images/bg.png">
+<meta name="keywords" content="captcha, gd, php">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="canonical" href="http://godoy.net.br/php/2009/captcha-confirmacao-visual/">
+<link rel="alternate" type="application/rss+xml" title="Adriano Godoy" href="http://godoy.net.br/feed.xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-31336570-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<script>base_url = "";</script>
+  </head>
+  <body class="single">
+    <main class="main-container">
+        <header class="site-header">
+  <div class="container txt-center">
+    <a href="#" class="nav-toogle js-menu-trigger sliding-panel-button">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+    <nav class="js-menu sliding-panel-content">
+      <ul>
+        <li><a href="/">home</a></li>
+        <li><a href="/about">about</a></li>
+        <li><a href="/feed.xml" target="_blank"><i class="icon icon-feed"></i> feed</a></li>
+      </ul>
+    </nav>
+    <div class="js-menu-screen sliding-panel-fade-screen"></div>
+    <a href="/" class="author-thumb dot">
+      <img src="/images/author.jpg" alt="Author thumbnail" class="dot">
+    </a>
+      <h1 class="post-title">Captcha - Confirmação Visual</h1>
+      <p class="post-meta">Mar 13, 2009</p>
+  </div>
+</header>
+        <section class="main-content">
+          <article class="post">
+  <div class="post-content container">
+    <p>Depois de um bom tempo com o blog parado, vou mostrar um modo de desenvolver um <a href="https://pt.wikipedia.org/wiki/CAPTCHA" target="_blank">captcha</a> utilizando a biblioteca GD do php. O captcha é um <a href="https://pt.wikipedia.org/wiki/Teste_de_Turing" target="_blank">teste de turing</a> reverso, pois é a máquina que testa se o usuário é humano. Este teste evita que sistemas automatizados enviem spans pelos formulários de seu site.</p>
+<p>A idéia é bem simples. Vamos ter um arquivo php que gera uma imagem, podendo ser exibido como se de fato fosse uma imagem:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;geraImagemConfirmacao.php&quot;</span> <span class="na">alt=</span><span class="s">&quot;Captcha&quot;</span> <span class="nt">/&gt;</span></code></pre></div>
+<p>Essa imagem será gerada, e o conteúdo gravado em um cookie. Este cookie será utilizado na ação de seu formulário, quando deverá ser comparado com o texto digitado pelo usuário. Vou procurar fazer o mais simples possível:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&quot;acaoConfirmaCodigo.php&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;geraImagemConfirmacao.php&quot;</span> <span class="na">alt=</span><span class="s">&quot;Captcha&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;palavraUsuario&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre></div>
+<p>Salve este arquivo com um nome qualquer.
+No arquivo <code>acaoConfirmaCodigo.php</code>, coloque da seguinte forma:</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$palavraUsuario</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;palavraUsuario&#39;</span><span class="p">]);</span>
+<span class="nv">$palavraGerada</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">[</span><span class="s1">&#39;palavraGerada&#39;</span><span class="p">]);</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$palavraUsuario</span> <span class="o">==</span> <span class="nv">$palavraGerada</span><span class="p">)</span>
+<span class="k">echo</span> <span class="s2">&quot;Confirmação visual correta.&quot;</span><span class="p">;</span>
+<span class="k">else</span>
+<span class="k">echo</span> <span class="s2">&quot;Por favor, tente novamente.&quot;</span><span class="p">;</span>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<p>O que este arquivo faz nada mais é do que pegar a palavra digitada pelo usuário (enviada pelo POST) e a palavra armazenada no cookie, passando ambas para a forma minúscula, e então comparando-as.</p>
+<p>Agora vamos à parte realmente interessante, o arquivo <code>geraImagemConfirmacao.php</code>:</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$larguraImg</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="nv">$alturaImg</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+<span class="nv">$espacoMinLetrasX</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span>
+<span class="nv">$espacoMaxLetrasX</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="nv">$espacoMinLetrasY</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="nv">$espacoMaxLetrasY</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="nv">$numLetras</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nv">$letras</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">,</span><span class="s1">&#39;8&#39;</span><span class="p">,</span><span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">);</span>
+<span class="c1">// cria uma imagem</span>
+<span class="nv">$imagem</span> <span class="o">=</span> <span class="nb">imagecreate</span><span class="p">(</span><span class="nv">$larguraImg</span><span class="p">,</span> <span class="nv">$alturaImg</span><span class="p">);</span>
+<span class="cm">/* Cores para utilizar na imagem imagem */</span>
+<span class="nv">$cinza</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">);</span>
+<span class="nv">$cinza_escuro</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">);</span>
+<span class="nv">$vermelho</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mh">0xFF</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">);</span>
+<span class="nv">$azul</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mh">0x0F</span><span class="p">,</span><span class="mi">0</span><span class="nx">×93</span><span class="p">,</span><span class="mh">0xFF</span><span class="p">);</span>
+<span class="nv">$verde</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">,</span><span class="mi">0</span><span class="nx">×66</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">);</span>
+<span class="nv">$preto</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">,</span><span class="mi">0</span><span class="nx">×00</span><span class="p">);</span>
+<span class="nv">$laranja</span> <span class="o">=</span> <span class="nb">imagecolorallocate</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span><span class="mh">0xFF</span><span class="p">,</span><span class="mh">0x8C</span><span class="p">,</span><span class="mi">0</span><span class="nx">×24</span><span class="p">);</span>
+<span class="nv">$cores</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$vermelho</span><span class="p">,</span> <span class="nv">$azul</span><span class="p">,</span> <span class="nv">$verde</span><span class="p">,</span> <span class="nv">$preto</span><span class="p">);</span>
+<span class="nv">$tamanho_letras</span> <span class="o">=</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$letras</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="nv">$tamanho_cores</span> <span class="o">=</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$cores</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="cm">/* Escrevendo as letras… */</span>
+<span class="nv">$palavraGerada</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="nv">$x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nv">$i</span><span class="o">&lt;</span><span class="nv">$numLetras</span><span class="p">;</span><span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+<span class="nv">$x</span> <span class="o">+=</span> <span class="nb">rand</span><span class="p">(</span><span class="nv">$espacoMinLetrasX</span><span class="p">,</span> <span class="nv">$espacoMaxLetrasX</span><span class="p">);</span> <span class="c1">//localizacao horizontal</span>
+<span class="nv">$y</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">(</span><span class="nv">$espacoMinLetrasY</span><span class="p">,</span> <span class="nv">$espacoMaxLetrasY</span><span class="p">);</span>
+<span class="nv">$j</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nv">$tamanho_cores</span><span class="p">);</span>
+<span class="nv">$k</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nv">$tamanho_letras</span><span class="p">);</span>
+<span class="nv">$palavraGerada</span> <span class="o">.=</span> <span class="nv">$letras</span><span class="p">[</span><span class="nv">$k</span><span class="p">];</span>
+<span class="nb">imagestring</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">$x</span><span class="p">,</span> <span class="nv">$y</span><span class="p">,</span> <span class="nv">$letras</span><span class="p">[</span><span class="nv">$k</span><span class="p">],</span> <span class="nv">$cores</span><span class="p">[</span><span class="nv">$j</span><span class="p">]);</span> <span class="c1">//escreve a letra na imagem</span>
+<span class="p">}</span>
+<span class="nb">setcookie</span><span class="p">(</span><span class="s1">&#39;palavraGerada&#39;</span><span class="p">,</span> <span class="nv">$palavraGerada</span><span class="p">,</span> <span class="nb">time</span><span class="p">()</span><span class="o">+</span><span class="mi">7200</span><span class="p">);</span>
+<span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-type: image/jpeg&quot;</span><span class="p">);</span>
+<span class="nb">imagejpeg</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">);</span>
+<span class="nb">imagedestroy</span><span class="p">(</span><span class="nv">$imagem</span><span class="p">);</span></code></pre></div>
+<p>A primeira parte é apenas para configurar a imagem que será gerada:</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$larguraImg = 100;</span>
+<span class="x">$alturaImg = 30;</span></code></pre></div>
+<p>Note que essas dimensões têm que ser compatíveis com a quantidade de letras e o espaçamento das letras que você deseja gerar, caso contrário algumas letras ficarão fora da imagem simplesmente por falta de espaço.</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$espacoMinLetrasX = 15;</span>
+<span class="x">$espacoMaxLetrasX = 20;</span>
+<span class="x">$espacoMinLetrasY = 5;</span>
+<span class="x">$espacoMaxLetrasY = 10;</span>
+<span class="x">$numLetras = 4;</span></code></pre></div>
+<p>Aqui são determinados os intervalos das posições das letras na imagem. Por exemplo, a posição horizontal (espaço entre as letras) irá variar de 15 a 20px. Para realizar essa variação, utilizamos a função rand(min, max) do php.
+E também aqui é determinada a quantidade de letras que serão geradas na imagem.</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$letras = array(&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;, &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;Z&#39;, &#39;K&#39;, &#39;M&#39;, &#39;X&#39;);</span></code></pre></div>
+<p>Esse array contém as letras que poderão ser sorteadas e aparecer na imagem. Procure evitar letras como O, I, L… e os números 0 e 1, pois podem ser confundidos com facilidade.</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">// cria uma imagem</span>
+<span class="x">$imagem = imagecreate($larguraImg, $alturaImg);</span>
+<span class="x">/* Cores para utilizar na imagem imagem */</span>
+<span class="x">$cinza = imagecolorallocate($imagem,0xF8,0xF8,0xF8);</span>
+<span class="x">$cinza_escuro = imagecolorallocate($imagem,0xAC,0xAC,0xAC);</span>
+<span class="x">$vermelho = imagecolorallocate($imagem,0xFF,0×00,0×00);</span>
+<span class="x">$azul = imagecolorallocate($imagem,0x0F,0×93,0xFF);</span>
+<span class="x">$verde = imagecolorallocate($imagem,0×00,0×66,0×00);</span>
+<span class="x">$preto = imagecolorallocate($imagem,0×00,0×00,0×00);</span>
+<span class="x">$laranja = imagecolorallocate($imagem,0xFF,0x8C,0×24);</span>
+<span class="x">$cores = array($vermelho, $azul, $verde, $preto);</span></code></pre></div>
+<p>Neste ponto, criamos a imagem, e associamos as cores que utilizaremos na imagem. Além disso, coloco no array $cores as cores que serão sorteadas para cada letra. (Note mais uma vez que você deve facilitar a vida do usuário, então utilize cores fortes nas letras).</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$palavraGerada = &quot;&quot;;</span>
+<span class="x">$x = 0;</span>
+<span class="x">for($i=0;$i&lt;$numLetras;$i++){</span>
+<span class="x">$x += rand($espacoMinLetrasX, $espacoMaxLetrasX); //localizacao horizontal</span>
+<span class="x">$y = rand($espacoMinLetrasY, $espacoMaxLetrasY);</span>
+<span class="x">$j = rand(0,$tamanho_cores);</span>
+<span class="x">$k = rand(0,$tamanho_letras);</span>
+<span class="x">$palavraGerada .= $letras[$k];</span>
+<span class="x">imagestring($imagem, 5, $x, $y, $letras[$k], $cores[$j]); //escreve a letra na imagem</span>
+<span class="x">}</span></code></pre></div>
+<p>Na iteração, para cada letra sortea-se a posição x e y, dentro do intervalo configurado. Note que o intervalo x deve ser incrementado a cada iteração, caso contrário todas as letras ficariam dentro de um mesmo intervalo na horizontal (experimente trocar o += por =, para ver como fica).</p>
+<p>Também são sorteadas a letra e sua cor, dentro do array pré-determinado. Só então a letra é gravada na imagem, com a função <code>imagestring()</code> do php.</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">setcookie(&#39;palavraGerada&#39;, $palavraGerada, time()+7200);</span>
+<span class="x">header(&quot;Content-type: image/jpeg&quot;);</span>
+<span class="x">imagejpeg($imagem);</span></code></pre></div>
+<p>Finalmente a imagem é gravada no cookie e criada na tela, utilizando o cabeçalho <code>Content-type: image/jpeg</code>. Pronto!</p>
+<p>Se achar conveniente, você pode utilizar outras funções da GD como imagearc, imagelin.. para “dificultar” a visualização da imagem (cuidado para não deixar a imagem imcompreensível).</p>
+    <aside class="share">
+      <span>Compartilhe: </span>
+      <!-- Go to www.addthis.com/dashboard to customize your tools -->
+      <div class="addthis_inline_share_toolbox"></div>
+    </aside>
+  </div>
+  <hr>
+  <aside id="comments" class="disqus">
+    <div class="container">
+      <h3><i class="icon icon-comments-o"></i> Comments</h3>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'adrianogodoy';
+        var disqus_identifier = '/php/2009/captcha-confirmacao-visual';
+        var disqus_title = 'Captcha - Confirmação Visual';
+        var disqus_url = 'http://godoy.net.br';
+        /*var disqus_developer = 1;*/
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>
+        Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+      </noscript>
+    </div>
+  </aside>
+</article>
+        </section>
+<div class="clearfix"></div>
+<footer class="site-footer txt-center">
+  <hr>
+  <ul class="social">
+  </ul>
+</footer>
+    </main>
+    <!-- <a href="https://github.com/Godoy/godoy.github.io.git" target="_blank" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#000; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a> -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jekyll-search.min.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4ea16b894211cc28"></script>
+  </body>
+</html>

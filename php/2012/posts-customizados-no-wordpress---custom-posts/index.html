@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="theme-color" content="#2ecc71">
+<title> Posts Customizados no Wordpress   Custom Posts | Adriano Godoy</title>
+<meta name="description" content="Posts Customizados no Wordpress - Custom Posts">
+<meta name="og:image" content="/images/bg.png">
+<meta name="keywords" content="cms, custom posts, php, wordpress">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="canonical" href="http://godoy.net.br/php/2012/posts-customizados-no-wordpress---custom-posts/">
+<link rel="alternate" type="application/rss+xml" title="Adriano Godoy" href="http://godoy.net.br/feed.xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-31336570-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<script>base_url = "";</script>
+  </head>
+  <body class="single">
+    <main class="main-container">
+        <header class="site-header">
+  <div class="container txt-center">
+    <a href="#" class="nav-toogle js-menu-trigger sliding-panel-button">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+    <nav class="js-menu sliding-panel-content">
+      <ul>
+        <li><a href="/">home</a></li>
+        <li><a href="/about">about</a></li>
+        <li><a href="/feed.xml" target="_blank"><i class="icon icon-feed"></i> feed</a></li>
+      </ul>
+    </nav>
+    <div class="js-menu-screen sliding-panel-fade-screen"></div>
+    <a href="/" class="author-thumb dot">
+      <img src="/images/author.jpg" alt="Author thumbnail" class="dot">
+    </a>
+      <h1 class="post-title">Posts Customizados no Wordpress   Custom Posts</h1>
+      <p class="post-meta">May 14, 2012</p>
+  </div>
+</header>
+        <section class="main-content">
+          <article class="post">
+  <div class="post-content container">
+    <p>O “Custom Post” permite utilizar o wordpress como um “CMS”. Esse recurso possibilita que os posts sejam tratados como “tipos” distintos (Ex.: notícias, eventos, cursos, etc.). Dentre outras vantagens, o sistema administrativo fica muito mais organizado e o gerenciamento do conteúdo muito mais simples e intuitivo.</p>
+<p>Vamos supor que um site qualquer em WordPress precise exibir disciplinas de um curso. Para registrar o tipo disciplina como um custom post, basta ir no arquivo <code>functions.php</code> do tema e adicionar o seguinte código:</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">,</span> <span class="s1">&#39;criar_tipos_personalizados&#39;</span><span class="p">);</span>
+<span class="k">function</span> <span class="nf">criar_tipos_personalizados</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">register_post_type</span><span class="p">(</span> <span class="s1">&#39;exemplo_disciplina&#39;</span><span class="p">,</span>
+  <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;labels&#39;</span> <span class="o">=&gt;</span>
+    <span class="k">array</span><span class="p">(</span>
+      <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Disciplinas&#39;</span><span class="p">),</span>
+      <span class="s1">&#39;singular_name&#39;</span> <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Disciplina&#39;</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="s1">&#39;public&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+    <span class="s1">&#39;rewrite&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;disciplina&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;capability_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;hierarchical&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+    <span class="s1">&#39;supports&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;editor&#39;</span><span class="p">,</span><span class="s1">&#39;thumbnail&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;has_archive&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
+      <span class="p">)</span>
+  <span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Utilizamos um “gancho” (ou Hook) para registrar a função que irá criar os custom posts:
+<code>add_action(‘init’, ‘criar_tipos_personalizados’);</code>
+(lembrando que o nome da função – criar_tipos_personalizados – é arbitrária)</p>
+<p>Com a função do WordPress <code>register_post_type</code> criamos nosso tipo “exemplo_disciplina”. É possível definir vários labels para o novo tipo, veja na documentação da função register_post_type todas as possibilidades. Aqui criamos apenas o básico para a fácil identificação no admin.</p>
+<p>Podemos nomear os tipos da forma que for mais conveniente. No caso, nosso tipo foi registrado no WordPress como exemplo_disciplina, mas a fim de melhorar a legibilidade nas URLs utilizamos o trecho
+<code>‘rewrite’ =&gt; array(‘slug’ =&gt; ‘disciplina’),</code>
+para que o WordPress exiba os posts do tipo exemplo_disciplina como disciplina.</p>
+<p>Para adicionar mais Custom Posts ao projeto, basta utilizar novamente a função <code>register_post_type</code> dentro da nossa função definida. Vamos adicionar o tipo “exemplo_aluno”:</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;init&#39;</span><span class="p">,</span> <span class="s1">&#39;criar_tipos_personalizados&#39;</span><span class="p">);</span>
+<span class="k">function</span> <span class="nf">criar_tipos_personalizados</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">register_post_type</span><span class="p">(</span> <span class="s1">&#39;exemplo_disciplina&#39;</span><span class="p">,</span>
+    	<span class="k">array</span><span class="p">(</span>
+	        <span class="s1">&#39;labels&#39;</span> <span class="o">=&gt;</span>
+    			<span class="k">array</span><span class="p">(</span>
+			        <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Disciplinas&#39;</span><span class="p">),</span>
+			        <span class="s1">&#39;singular_name&#39;</span> <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Disciplina&#39;</span><span class="p">)</span>
+			    <span class="p">),</span>		
+	        <span class="s1">&#39;public&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+	        <span class="s1">&#39;rewrite&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;disciplina&#39;</span><span class="p">),</span>
+	        <span class="s1">&#39;capability_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+	        <span class="s1">&#39;hierarchical&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>	     
+	        <span class="s1">&#39;supports&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;editor&#39;</span><span class="p">,</span><span class="s1">&#39;thumbnail&#39;</span><span class="p">),</span>
+		<span class="s1">&#39;has_archive&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
+	      <span class="p">)</span>
+	<span class="p">);</span>
+    <span class="nx">register_post_type</span><span class="p">(</span> <span class="s1">&#39;exemplo_aluno&#39;</span><span class="p">,</span>
+    	<span class="k">array</span><span class="p">(</span>
+	        <span class="s1">&#39;labels&#39;</span> <span class="o">=&gt;</span>
+    			<span class="k">array</span><span class="p">(</span>
+			        <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Alunos&#39;</span><span class="p">),</span>
+			        <span class="s1">&#39;singular_name&#39;</span> <span class="o">=&gt;</span> <span class="nx">__</span><span class="p">(</span><span class="s1">&#39;Aluno&#39;</span><span class="p">)</span>
+			    <span class="p">),</span>		
+	        <span class="s1">&#39;public&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+	        <span class="s1">&#39;rewrite&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;aluno&#39;</span><span class="p">),</span>
+	        <span class="s1">&#39;capability_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+	        <span class="s1">&#39;hierarchical&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>	     
+	        <span class="s1">&#39;supports&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">),</span>
+		<span class="s1">&#39;has_archive&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
+	      <span class="p">)</span>
+	<span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Vá ao sistema administrativo do wordpress, e você verá seus 2 novos tipos no menu. E para exibir estes itens? Crie um template de páginas com o nome <code>template-disciplina.php</code> em seu tema e insira o código que se segue: (lembre-se de seguir a estrutura do seu tema. Para facilitar, copie algum dos arquivos do tema que exiba posts)</p>
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**</span>
+<span class="sd"> * Template Name: Disciplinas</span>
+<span class="sd"> *</span>
+<span class="sd"> */</span>
+<span class="nx">get_header</span><span class="p">();</span>
+	<span class="nv">$args</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+		<span class="s2">&quot;post_type&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;exemplo_disciplina&quot;</span>												
+	<span class="p">);</span>
+	<span class="nv">$posts</span> <span class="o">=</span> <span class="nx">query_posts</span><span class="p">(</span><span class="nv">$args</span><span class="p">);</span>
+	<span class="k">while</span> <span class="p">(</span> <span class="nx">have_posts</span><span class="p">()</span> <span class="p">)</span> <span class="o">:</span> <span class="nx">the_post</span><span class="p">();</span>
+	<span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">		&lt;h1&gt;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nx">get_the_title</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">&lt;/h1&gt;</span>
+<span class="x">	</span><span class="cp">&lt;?php</span>
+	<span class="k">endwhile</span><span class="p">;</span>
+<span class="nx">get_footer</span><span class="p">();</span></code></pre></div>
+<p>Feito isto, vá a administração de páginas e crie um nova página em seu WordPress com o título Disciplinas. Além do título, em Atributos de Página -&gt; Modelo, selecione o template Disciplinas, criado no passo anterior. Feito! Acesse sua página e será possível visualizar a listagem das disciplinas já cadastradas.</p>
+<p>Veremos, em um próximo post, como inserir categorias customizadas (ou Taxonomies). Por exemplo, podemos criar a categoria “Semestre”, e relacioná-la com disciplinas cadastradas em nosso sistema.</p>
+    <aside class="share">
+      <span>Compartilhe: </span>
+      <!-- Go to www.addthis.com/dashboard to customize your tools -->
+      <div class="addthis_inline_share_toolbox"></div>
+    </aside>
+  </div>
+  <hr>
+  <aside id="comments" class="disqus">
+    <div class="container">
+      <h3><i class="icon icon-comments-o"></i> Comments</h3>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'adrianogodoy';
+        var disqus_identifier = '/php/2012/posts-customizados-no-wordpress---custom-posts';
+        var disqus_title = 'Posts Customizados no Wordpress   Custom Posts';
+        var disqus_url = 'http://godoy.net.br';
+        /*var disqus_developer = 1;*/
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>
+        Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+      </noscript>
+    </div>
+  </aside>
+</article>
+        </section>
+<div class="clearfix"></div>
+<footer class="site-footer txt-center">
+  <hr>
+  <ul class="social">
+  </ul>
+</footer>
+    </main>
+    <!-- <a href="https://github.com/Godoy/godoy.github.io.git" target="_blank" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#000; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a> -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jekyll-search.min.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4ea16b894211cc28"></script>
+  </body>
+</html>

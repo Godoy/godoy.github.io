@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="theme-color" content="#2ecc71">
+<title> SEO em Rails: Sitemap Metatags e Slug url | Adriano Godoy</title>
+<meta name="description" content="SEO em Rails: Sitemap Metatags e Slug url">
+<meta name="og:image" content="/images/bg.png">
+<meta name="keywords" content="friendly_id, ruby on rails, seo, sitemap_generator, truncate_html">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="canonical" href="http://godoy.net.br/ruby-on-rails/2016/seo-em-rails-sitemap-metatags-e-slug-url/">
+<link rel="alternate" type="application/rss+xml" title="Adriano Godoy" href="http://godoy.net.br/feed.xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-31336570-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<script>base_url = "";</script>
+  </head>
+  <body class="single">
+    <main class="main-container">
+        <header class="site-header">
+  <div class="container txt-center">
+    <a href="#" class="nav-toogle js-menu-trigger sliding-panel-button">
+      <span></span>
+      <span></span>
+      <span></span>
+    </a>
+    <nav class="js-menu sliding-panel-content">
+      <ul>
+        <li><a href="/">home</a></li>
+        <li><a href="/about">about</a></li>
+        <li><a href="/feed.xml" target="_blank"><i class="icon icon-feed"></i> feed</a></li>
+      </ul>
+    </nav>
+    <div class="js-menu-screen sliding-panel-fade-screen"></div>
+    <a href="/" class="author-thumb dot">
+      <img src="/images/author.jpg" alt="Author thumbnail" class="dot">
+    </a>
+      <h1 class="post-title">SEO em Rails: Sitemap Metatags e Slug url</h1>
+      <p class="post-meta">Mar 6, 2016</p>
+  </div>
+</header>
+        <section class="main-content">
+          <article class="post">
+  <div class="post-content container">
+    <p>Neste post vou apresentar algumas dicas básicas de SEO e aplicá-las em um projeto Ruby on Rails explicando cada passo. Já existem vários blogs com dicas de SEO (<a href="http://www.seomaster.com.br/blog" target="_blank">SEO Master</a>, <a href="http://www.agenciamestre.com/blog/" target="_blank">Agência Mestre</a>, <a href="https://moz.com/blog" target="_blank">MOZ</a>, etc), por isso focaremos em como aplicar as técnicas e mostrar quais gems podem nos auxiliar.</p>
+<p>O resultado dos passos aqui descritos resultaram neste projeto no Github: <a href="https://github.com/adrianogodoy/rails-seo" target="_blank">https://github.com/adrianogodoy/rails-seo</a>. Após ler este post, se ainda restarem dúvidas, veja o log dos commits no github ou comente 😉</p>
+<h2 id="criando-a-aplicao-base-para-aplicar-as-tcnicas">Criando a aplicação base para aplicar as técnicas</h2>
+<p>Para aplicar as técnicas, vamos criar um site com uma administração de conteúdo básica. Criaremos os tipos Event (eventos), News (notícias) e relacionaremos esses itens com o model Category (categorias).</p>
+<p>Não nos preocuparemos com autenticação de usuários e validações pois não são relevantes para o conteúdo abordado neste post.</p>
+<p>Comece criando o projeto no <code>Terminal</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="kp">new</span> <span class="n">rails</span><span class="o">-</span><span class="n">seo</span></code></pre></div>
+<p>Adicionaremos as gems <code>RailsAdmin</code> e <code>Paperclip</code>  apenas para facilitar a inserção de conteúdo no site. Vamos também adicionar a gem <code>Bootstrap-Sass</code>.</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s2">&quot;paperclip&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 4.2&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;rails_admin&quot;</span>
+<span class="n">gem</span> <span class="s2">&quot;bootstrap-sass&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 3.3.3&quot;</span></code></pre></div>
+<p>No terminal, instale o <code>rails_admin</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="n">g</span> <span class="ss">rails_admin</span><span class="p">:</span><span class="n">install</span></code></pre></div>
+<p>Criando os models:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="n">g</span> <span class="n">model</span> <span class="no">Category</span> <span class="nb">name</span>
+<span class="n">rails</span> <span class="n">g</span> <span class="n">model</span> <span class="no">News</span> <span class="n">title</span> <span class="ss">category</span><span class="p">:</span><span class="n">references</span> <span class="ss">content</span><span class="p">:</span><span class="n">text</span> <span class="ss">image</span><span class="p">:</span><span class="n">attachment</span>
+<span class="n">rails</span> <span class="n">g</span> <span class="n">model</span> <span class="no">Event</span> <span class="n">title</span> <span class="ss">category</span><span class="p">:</span><span class="n">references</span> <span class="ss">content</span><span class="p">:</span><span class="n">text</span> <span class="ss">image</span><span class="p">:</span><span class="n">attachment</span> <span class="ss">start_date</span><span class="p">:</span><span class="n">datetime</span> <span class="ss">end_date</span><span class="p">:</span><span class="n">datetime</span> <span class="n">place</span>
+<span class="n">rake</span> <span class="ss">db</span><span class="p">:</span><span class="n">migrate</span></code></pre></div>
+<p>Os models ficam da seguinte forma:</p>
+<p>Arquivo <code>app/models/category.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Category</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:events</span>
+  <span class="n">has_many</span> <span class="ss">:news</span>
+<span class="k">end</span></code></pre></div>
+<p><code>app/models/event.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Event</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:category</span>
+  <span class="n">has_attached_file</span> <span class="ss">:image</span><span class="p">,</span> <span class="ss">:styles</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:medium</span> <span class="o">=&gt;</span> <span class="s2">&quot;300x300&gt;&quot;</span><span class="p">,</span> <span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="s2">&quot;100x100&gt;&quot;</span> <span class="p">},</span> <span class="ss">:default_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;/images/:style/missing.png&quot;</span>
+  <span class="n">validates_attachment_content_type</span> <span class="ss">:image</span><span class="p">,</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="sr">/\Aimage\/.*\Z/</span>
+<span class="k">end</span></code></pre></div>
+<p><code>app/models/news.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">News</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:category</span>
+  <span class="n">has_attached_file</span> <span class="ss">:image</span><span class="p">,</span> <span class="ss">:styles</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:medium</span> <span class="o">=&gt;</span> <span class="s2">&quot;300x300&gt;&quot;</span><span class="p">,</span> <span class="ss">:thumb</span> <span class="o">=&gt;</span> <span class="s2">&quot;100x100&gt;&quot;</span> <span class="p">},</span> <span class="ss">:default_url</span> <span class="o">=&gt;</span> <span class="s2">&quot;/images/:style/missing.png&quot;</span>
+  <span class="n">validates_attachment_content_type</span> <span class="ss">:image</span><span class="p">,</span> <span class="ss">:content_type</span> <span class="o">=&gt;</span> <span class="sr">/\Aimage\/.*\Z/</span>
+<span class="k">end</span></code></pre></div>
+<p>Neste ponto já podemos cadastrar conteúdo no admin. Sugiro carregar conteúdo via seed – <a href="http://godoy.net.br/ruby-on-rails/2015/importacao-de-conteudo-e-seed-no-rails/">veja neste post como criar o seed com lorem ipsum</a>.</p>
+<p>Agora criaremos as rotas, views e controllers para a página home, lista e interna de noticias, lista e interna de eventos.</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="n">g</span> <span class="n">controller</span> <span class="n">pages</span> <span class="n">home</span>
+<span class="n">rails</span> <span class="n">g</span> <span class="n">controller</span> <span class="n">news</span> <span class="n">index</span> <span class="n">show</span>
+<span class="n">rails</span> <span class="n">g</span> <span class="n">controller</span> <span class="n">events</span> <span class="n">index</span> <span class="n">show</span></code></pre></div>
+<p>No arquivo de rotas, aponte o root para a home e deixe as rotas da seguinte forma:</p>
+<p><code>config/routes.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span>
+  <span class="n">root</span> <span class="s1">&#39;pages#home&#39;</span>
+  <span class="n">get</span> <span class="s1">&#39;events&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;events#index&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:events</span>
+  <span class="n">get</span> <span class="s1">&#39;events/:id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;events#show&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:event</span>
+  <span class="n">get</span> <span class="s1">&#39;news&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;news#index&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:news_index</span>
+  <span class="n">get</span> <span class="s1">&#39;news/:id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;news#show&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:news</span>
+  <span class="n">mount</span> <span class="no">RailsAdmin</span><span class="o">::</span><span class="no">Engine</span> <span class="o">=&gt;</span> <span class="s1">&#39;/admin&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="s1">&#39;rails_admin&#39;</span>
+<span class="k">end</span></code></pre></div>
+<p>Após configurar as rotas, inclua os scripts e css do Bootstrap no projeto. Siga os passos descritos na gem ou veja as modificações realizadas <a href="https://github.com/Godoy/rails-seo/commit/18cbd0f457dea06c755b50af549d56b7fb9af389" target="_blank">neste commit</a>.</p>
+<p>Neste ponto já é possível acessar as páginas de eventos e notícias. Estamos prontos para começar a aplicar as melhorias.</p>
+<h2 id="ttulos-e-headers">Títulos e Headers</h2>
+<p>O título da página é um dos elementos mais importantes para compor o SEO. Ele diz aos usuários (e aos buscadores) qual conteúdo será apresentado na página. Para o title é indicado um tamanho máximo de 70 caracteres (cerca de 10 palavras). Além disso, é recomendado que cada página tenha um título único que a distingua das outras páginas.</p>
+<p>Um erro comum é a repetição ou o uso indiscriminado da tag h1. Ela deve ocorrer uma única vez por página. Portanto não é aconselhável colocar o nome do site, no header, dentro de uma tag h1. Deixe a tag para o título do conteúdo que está sendo apresentado na página. Subtítulos, sub-seções e afins podem ser expressados com as tags h2, h3, etc. Estas podem se repetir na página.</p>
+<p>Para facilitar a definição do título e header, utilizaremos a gem meta-tags. Adicione a gem ao seu Gemfile. Em seguida, no layout, substitua a linha da tag <title> pela seguinte:</title></p>
+<p><code>app/views/layouts/application.html.erb</code>:</p>
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="cp">&lt;%=</span> <span class="n">display_meta_tags</span> <span class="ss">:site</span> <span class="o">=&gt;</span> <span class="s1">&#39;SEO no Rails&#39;</span><span class="p">,</span> <span class="ss">:reverse</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="cp">%&gt;</span><span class="x"></span></code></pre></div>
+<p>O valor de “site” corresponde ao nome do seu site. Utilizei a opção “reverse” true para que o nome do site seja repetido depois do título da página. Ficaria algo como:</p>
+<p><em>Título de exemplo da página | SEO no Rails</em></p>
+<p>Além disso, em cada view, coloque a tag h1:</p>
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="x">&lt;h1&gt;</span><span class="cp">&lt;%=</span> <span class="n">title</span> <span class="cp">%&gt;</span><span class="x">&lt;/h1&gt;</span></code></pre></div>
+<p>Nos controllers defina o valor do title. As actions de eventos, por exemplo, ficam da seguinte forma:</p>
+<p><code>app/controllers/events_controller.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">index</span>
+    <span class="vi">@events</span> <span class="o">=</span> <span class="no">Event</span><span class="o">.</span><span class="n">all</span>
+    <span class="vi">@page_title</span> <span class="o">=</span> <span class="s1">&#39;Eventos&#39;</span>
+  <span class="k">end</span>
+  <span class="k">def</span> <span class="nf">show</span>
+    <span class="vi">@page_title</span> <span class="o">=</span> <span class="vi">@event</span><span class="o">.</span><span class="n">title</span>
+  <span class="k">end</span></code></pre></div>
+<p>Simples! Veja <a href="https://github.com/Godoy/rails-seo/commit/51b180b5b32d5a9e18858c3c5a34f77edebb36e7" target="_blank">neste commit</a> as alterações feitas em nosso projeto neste passo.</p>
+<h2 id="metatags">Metatags</h2>
+<p>Precisamos também definir nossas metatags: description, keywords, além das metatags do facebook. A description não é tão relevante para rankeamento quanto o título, mas é extremamente importante para ganhar o clique do usuário no resultado de busca. O indicado é que a description possua entre 150 e 160 caracteres.</p>
+<p>Da mesma forma, usaremos a gem meta-tags:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">NewsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="kp">include</span> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TextHelper</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">def</span> <span class="nf">show</span>
+    <span class="vi">@page_title</span> <span class="o">=</span> <span class="vi">@news</span><span class="o">.</span><span class="n">title</span>
+    <span class="vi">@page_description</span> <span class="o">=</span> <span class="n">truncate</span><span class="p">(</span><span class="vi">@news</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="ss">length</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="ss">omission</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">)</span>
+    <span class="vi">@page_keywords</span>    <span class="o">=</span> <span class="vi">@news</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">gsub</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span>
+    <span class="n">set_meta_tags</span> <span class="ss">:og</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="ss">:title</span>    <span class="o">=&gt;</span> <span class="vi">@page_title</span><span class="p">,</span>
+      <span class="ss">:image</span>    <span class="o">=&gt;</span> <span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="o">+</span><span class="vi">@news</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+      <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="vi">@page_description</span>
+    <span class="p">}</span>
+  <span class="k">end</span></code></pre></div>
+<p>Para utilizar o helper truncate no texto, inclua-o no controller (linha 2). Apenas para exemplificar, no campo Keywords quebrei o título separando as palavras com vírgulas. Para um projeto real, torne isso gerenciável. Crie um novo campo “keywords” onde o administrador possa cadastrar keywords específicas para cada conteúdo. Faça o mesmo com a description. Ao invés de utilizar os 150 primeiros caracteres (que podem não ter nada relevante sendo dito), crie um campo administrável, assim o usuário pode inserir um texto mais interessante para chamar os usuários para visitar a página. <a href="https://github.com/Godoy/rails-seo/commit/5f34929a7b50b6d9d4c40fc2f9730336ee88b0c5" target="_blank">Commit com as alterações</a></p>
+<h2 id="url-amigvel">URL Amigável</h2>
+<p>Além da url ser um fator muito relevante para o rankeamento da página nos resultados de busca, ela é outro importante mecanismo para transmitir ao usuário qual será o conteúdo da página. (veja <a href="http://godoy.net.br/php/2008/urls-amigaveis---htaccess/" target="_blank">neste post como fazer em PHP utilizando .htaccess</a> – old but gold 😀 )</p>
+<p>Para desenvolvermos esta feature no rails, mais uma vez faremos uso de uma gem: FriendlyId. No gemfile, adicione:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Gemfile</span>
+<span class="n">gem</span> <span class="s1">&#39;friendly_id&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 5.1.0&#39;</span></code></pre></div>
+<p>Execute o bundle install e em seguida o comando:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">friendly_id</span></code></pre></div>
+<p>Este comando irá gerar, além do initializer, uma migration para criação de uma tabela onde serão armazenados os slugs e o histórico de alterações com correspondências de slugs. Precisamos também criar o campo slug nos nossos tipos (notícias, eventos e categorias). Execute as migrations:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="n">generate</span> <span class="n">migration</span> <span class="n">add_slug_to_news</span> <span class="ss">slug</span><span class="p">:</span><span class="ss">string</span><span class="p">:</span><span class="n">uniq</span>
+<span class="n">rails</span> <span class="n">generate</span> <span class="n">migration</span> <span class="n">add_slug_to_events</span> <span class="ss">slug</span><span class="p">:</span><span class="ss">string</span><span class="p">:</span><span class="n">uniq</span>
+<span class="n">rails</span> <span class="n">generate</span> <span class="n">migration</span> <span class="n">add_slug_to_categories</span> <span class="ss">slug</span><span class="p">:</span><span class="ss">string</span><span class="p">:</span><span class="n">uniq</span>
+<span class="n">rake</span> <span class="ss">db</span><span class="p">:</span><span class="n">migrate</span></code></pre></div>
+<p>Agora podemos decorar os models para sinalizar qual campo devem utilizar para a criação do slug, como por exemplo no model News, que utilizaremos o campo title:</p>
+<p><code>app/models/news.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">News</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="kp">extend</span> <span class="no">FriendlyId</span>
+  <span class="n">friendly_id</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">use</span><span class="p">:</span> <span class="ss">:slugged</span>
+<span class="k">end</span></code></pre></div>
+<p>No caso de eventos, é possível fazer um combo bacana na geração dos slugs, concatenando a data com o título do evento:</p>
+<p><code>app/models/event.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Event</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="kp">extend</span> <span class="no">FriendlyId</span>
+  <span class="n">friendly_id</span> <span class="ss">:my_method_slug</span><span class="p">,</span> <span class="ss">use</span><span class="p">:</span> <span class="ss">:slugged</span>
+  <span class="k">def</span> <span class="nf">my_method_slug</span>
+    <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m/%d/%Y&quot;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; - </span><span class="si">#{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>Como já havíamos cadastrado nosso conteúdo de teste, precisamos salvar novamente todos os registros para que seus slugs sejam gerados. O comando para ser executado no rails console é simples. Veja <a href="https://gist.github.com/Godoy/6564097" target="_blank">neste gist</a>.</p>
+<p>Na listagem de notícias (http://localhost:3000/news) já é possível ver a nova URL sendo automaticamente gerada passando o slug ao invés do id. Agora só precisamos alterar a forma como os registros são buscados no controller:</p>
+<p><code>app/controllers/events_controller.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">EventsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="kp">private</span>
+    <span class="k">def</span> <span class="nf">set_event</span>
+      <span class="vi">@event</span> <span class="o">=</span> <span class="no">Event</span><span class="o">.</span><span class="n">friendly</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>Done!</p>
+<p>OBS: Para impedir que o slug gerado automaticamente seja sobrescrito ou apagado pelo usuário no rails_admin, exclua o campo slug dos formulários no rails_admin inserindo o seguinte no seu model:</p>
+<p><code>app/models/event.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Event</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="n">rails_admin</span> <span class="k">do</span>
+    <span class="n">create</span> <span class="k">do</span>
+      <span class="n">exclude_fields</span> <span class="ss">:slug</span>
+    <span class="k">end</span>
+    <span class="n">edit</span> <span class="k">do</span>
+      <span class="n">exclude_fields</span> <span class="ss">:slug</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p><a href="https://github.com/Godoy/rails-seo/commit/c3df3da6377ee6ebc094de8f09f83c8a154d48cd" target="_blank">Clique aqui</a> para ver o commit com as alterações.</p>
+<h2 id="sitemap">Sitemap</h2>
+<p>O <a href="https://support.google.com/webmasters/answer/183668?hl=en" target="_blank">sitemap</a> é uma forma na qual o webmaster pode auxiliar (e agilizar) a indexação do site. Permite sugerir aos robôs de busca quais páginas devem ser indexadas, qual frequência de rastreamento, data da última modificação da página e a prioridade em relação às outras páginas do arquivo.</p>
+<p>Utilizaremos a gem <code>Sitemap Generator</code>. Adicione a gem ao seu Gemfile e execute o comando:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rake</span> <span class="ss">sitemap</span><span class="p">:</span><span class="n">install</span></code></pre></div>
+<p>No arquivo de configuração gerado, vamos inserir nossas páginas e rotas para os conteúdos:</p>
+<p><code>config/sitemap.rb</code>:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># Set the host name for URL creation</span>
+<span class="no">SitemapGenerator</span><span class="o">::</span><span class="no">Sitemap</span><span class="o">.</span><span class="n">default_host</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:3000&quot;</span>
+<span class="no">SitemapGenerator</span><span class="o">::</span><span class="no">Sitemap</span><span class="o">.</span><span class="n">create</span> <span class="k">do</span>
+  <span class="n">add</span> <span class="n">news_path</span><span class="p">,</span> <span class="ss">:priority</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="ss">:changefreq</span> <span class="o">=&gt;</span> <span class="s1">&#39;daily&#39;</span>
+  <span class="no">News</span><span class="o">.</span><span class="n">find_each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+    <span class="n">add</span> <span class="n">news_path</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="ss">:lastmod</span> <span class="o">=&gt;</span> <span class="n">item</span><span class="o">.</span><span class="n">updated_at</span>
+  <span class="k">end</span>
+  <span class="n">add</span> <span class="n">events_path</span><span class="p">,</span> <span class="ss">:priority</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span> <span class="ss">:changefreq</span> <span class="o">=&gt;</span> <span class="s1">&#39;daily&#39;</span>
+  <span class="no">Event</span><span class="o">.</span><span class="n">find_each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+    <span class="n">add</span> <span class="n">event_path</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="ss">:lastmod</span> <span class="o">=&gt;</span> <span class="n">item</span><span class="o">.</span><span class="n">updated_at</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>A página inicial já é incluida por default. Execute o seguinte para gerar o sitemap baseado nas configurações:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rake</span> <span class="ss">sitemap</span><span class="p">:</span><span class="n">refresh</span></code></pre></div>
+<p>E confira o seu sitemap gerado em <code>/public/sitemap.xml.gz</code>:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">...
+  <span class="nt">&lt;url&gt;</span>
+      <span class="nt">&lt;loc&gt;</span>http://localhost:3000<span class="nt">&lt;/loc&gt;</span>
+    <span class="nt">&lt;lastmod&gt;</span>2015-03-06T21:49:01-03:00<span class="nt">&lt;/lastmod&gt;</span>
+    <span class="nt">&lt;changefreq&gt;</span>always<span class="nt">&lt;/changefreq&gt;</span>
+    <span class="nt">&lt;priority&gt;</span>1.0<span class="nt">&lt;/priority&gt;</span>
+  <span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;url&gt;</span>
+    <span class="nt">&lt;loc&gt;</span>http://localhost:3000/noticias<span class="nt">&lt;/loc&gt;</span>
+    <span class="nt">&lt;lastmod&gt;</span>2015-03-06T21:49:01-03:00<span class="nt">&lt;/lastmod&gt;</span>
+    <span class="nt">&lt;changefreq&gt;</span>daily<span class="nt">&lt;/changefreq&gt;</span>
+    <span class="nt">&lt;priority&gt;</span>0.7<span class="nt">&lt;/priority&gt;</span>
+  <span class="nt">&lt;/url&gt;</span>
+  <span class="nt">&lt;url&gt;</span>
+    <span class="nt">&lt;loc&gt;</span>http://localhost:3000/noticias/optio-minima-exercitationem-dolor<span class="nt">&lt;/loc&gt;</span>
+    <span class="nt">&lt;lastmod&gt;</span>2015-03-07T00:19:29+00:00<span class="nt">&lt;/lastmod&gt;</span>
+    <span class="nt">&lt;changefreq&gt;</span>weekly<span class="nt">&lt;/changefreq&gt;</span>
+    <span class="nt">&lt;priority&gt;</span>0.5<span class="nt">&lt;/priority&gt;</span>
+  <span class="nt">&lt;/url&gt;</span>
+...</code></pre></div>
+<p>Veja o <a href="https://github.com/Godoy/rails-seo/commit/56cad016d28fee5fc83711408ebf60a1d5309a53" target="_blank">commit</a> com as alterações para Sitemap.</p>
+<h2 id="crie-contedo-e-monitore">Crie conteúdo e monitore!</h2>
+<p>Com as dicas básicas dadas neste artigo sua página estará em boas condições de aparecer nas buscas dos usuários pelo conteúdo do seu site. Lembre-se: antes de qualquer técnica, seu site precisa ter conteúdo!</p>
+<p>As técnicas de SEO existem para tornar claro qual o conteúdo de seu site e permitir que os buscadores exponham seu conteúdo quando for relevante para a busca feita.</p>
+<p>Faça o monitoramento de seu site. Acompanhe no Google Analytics o perfil de seu visitante, quais páginas são mais acessadas e as origens de tráfego.</p>
+<p>Cadastre seu site no Google Webmasters (http://www.google.com.br/webmasters/) e receba feedbacks de melhorias e erros no seu site.</p>
+<p>Em breve farei um post sobre microdados e utilizarei este mesmo projeto como base!</p>
+<p>Dúvidas e sugestões são bem vindas 😉</p>
+    <aside class="share">
+      <span>Compartilhe: </span>
+      <!-- Go to www.addthis.com/dashboard to customize your tools -->
+      <div class="addthis_inline_share_toolbox"></div>
+    </aside>
+  </div>
+  <hr>
+  <aside id="comments" class="disqus">
+    <div class="container">
+      <h3><i class="icon icon-comments-o"></i> Comments</h3>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'adrianogodoy';
+        var disqus_identifier = '/ruby-on-rails/2016/seo-em-rails-sitemap-metatags-e-slug-url';
+        var disqus_title = 'SEO em Rails: Sitemap Metatags e Slug url';
+        var disqus_url = 'http://godoy.net.br';
+        /*var disqus_developer = 1;*/
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>
+        Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+      </noscript>
+    </div>
+  </aside>
+</article>
+        </section>
+<div class="clearfix"></div>
+<footer class="site-footer txt-center">
+  <hr>
+  <ul class="social">
+  </ul>
+</footer>
+    </main>
+    <!-- <a href="https://github.com/Godoy/godoy.github.io.git" target="_blank" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#000; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a> -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jekyll-search.min.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4ea16b894211cc28"></script>
+  </body>
+</html>
